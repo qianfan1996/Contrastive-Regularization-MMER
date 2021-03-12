@@ -10,6 +10,10 @@ LINGUISTIC_DATASET_ASR_PATH = "data/linguistic_glove_features_asr.npy"
 LINGUISTIC_LABELS_ASR_PATH = "data/linguistic_glove_labels_asr.npy"
 SPECTROGRAMS_FEATURES_PATH = "data/spectrograms_features.npy"
 SPECTROGRAMS_LABELS_PATH = "data/spectrograms_labels.npy"
+SECOND_SESSION_SAMPLE_ID = 1085
+THIRD_SESSION_SAMPLE_ID = 2108
+FOURTH_SESSION_SAMPLE_ID = 3259
+LAST_SESSION_SAMPLE_ID = 4290
 
 def split_dataset_skip(dataset_features, dataset_labels, split_ratio=0.2):
     """Splittng dataset into train/val sets by taking every nth sample to val set"""
@@ -30,6 +34,35 @@ def split_dataset_skip(dataset_features, dataset_labels, split_ratio=0.2):
     assert test_features.shape[0] == test_labels.shape[0]
     assert val_features.shape[0] == val_labels.shape[0]
     assert train_features.shape[0] == train_labels.shape[0]
+
+    return test_features, test_labels, val_features, val_labels, train_features, train_labels
+
+def split_dataset_session_wise(dataset_features, dataset_labels, split_ratio=0.1):
+    """Splittng dataset into train/val sets by taking every nth sample to val set"""
+
+    test_indexes = list(range(LAST_SESSION_SAMPLE_ID, dataset_features.shape[0]))
+    # test_indexes = list(range(SECOND_SESSION_SAMPLE_ID))
+    # test_indexes = list(range(SECOND_SESSION_SAMPLE_ID, THIRD_SESSION_SAMPLE_ID))
+    # test_indexes = list(range(THIRD_SESSION_SAMPLE_ID, FOURTH_SESSION_SAMPLE_ID))
+    # test_indexes = list(range(FOURTH_SESSION_SAMPLE_ID, LAST_SESSION_SAMPLE_ID))
+
+    skip_ratio = int(1/split_ratio)
+    all_indexes = list(range(dataset_features.shape[0]))
+    train_indexes = list(set(all_indexes) - set(test_indexes))
+    val_indexes = train_indexes[::skip_ratio]
+    train_indexes = list(set(train_indexes) - set(val_indexes))
+
+    test_features = dataset_features[test_indexes]
+    test_labels = dataset_labels[test_indexes]
+    val_features = dataset_features[val_indexes]
+    val_labels = dataset_labels[val_indexes]
+    train_features = dataset_features[train_indexes]
+    train_labels = dataset_labels[train_indexes]
+
+    assert test_features.shape[0] == test_labels.shape[0]
+    assert val_features.shape[0] == val_labels.shape[0]
+    assert train_features.shape[0] == train_labels.shape[0]
+    assert test_features.shape[0] + val_features.shape[0] + train_features.shape[0] == dataset_features.shape[0]
 
     return test_features, test_labels, val_features, val_labels, train_features, train_labels
 
