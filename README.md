@@ -9,4 +9,8 @@ codes of paper "Contrastive Regularization for Multimodal Emotion Recognition Us
 ## 2. Dataset preprocessing
 1) use mocap_data_collect.py to convert raw IEMOCAP dataset to dictionary format
 2) choose 4-class emotion, 5531 samples
-3) 
+3) get transcriptions using gensim and deepspeech packages
+4) extract linguistic and acoustic features
+## 3. Run run_training.py to acquire linguistic and acoustic emotion recognition models
+## 4. Run run_training_ensemble.py /path to acquire ensemble model, i.e., baseline model
+## 5. Run run_training_ensemble_cl.py /path to acquire model which adds contrastive regularization
