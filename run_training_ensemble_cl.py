@@ -67,14 +67,9 @@ for alpha in alpha_list:
 	best_test_acc = 0
 	best_val_loss = 999
 	epochs_without_improvement = 0
-	"""
-	test_iterator_ac, train_iterator_ac = create_batches_no_valid(*load_spectrogram_dataset(), 128)
-	test_iterator_li, train_iterator_li = create_batches_no_valid(*load_linguistic_dataset(), 128)
-	test_iterator = EnsembleBatchIterator(test_iterator_ac, test_iterator_li)
-	train_iterator = EnsembleBatchIterator(train_iterator_ac, train_iterator_li)
-	"""
-	test_iterator_ac, train_iterator_ac, validation_iterator_ac = create_batches_with_valid(*load_spectrogram_dataset(), 128)
-	test_iterator_li, train_iterator_li, validation_iterator_li = create_batches_with_valid(*load_linguistic_dataset(), 128)
+
+	test_iterator_ac, train_iterator_ac, validation_iterator_ac = create_batches(*load_spectrogram_dataset(), 128)
+	test_iterator_li, train_iterator_li, validation_iterator_li = create_batches(*load_linguistic_dataset(), 128)
 	test_iterator = EnsembleBatchIterator(test_iterator_ac, test_iterator_li)
 	train_iterator = EnsembleBatchIterator(train_iterator_ac, train_iterator_li)
 	validation_iterator = EnsembleBatchIterator(validation_iterator_ac, validation_iterator_li)
